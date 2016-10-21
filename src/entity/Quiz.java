@@ -51,27 +51,27 @@ public class Quiz {
                 + dateOfCreate;
     }
 
-    public String getQuizName(){
+    public String getQuizName() {
         return quizName;
     }
 
-    public void setQuizName(String quizName){
+    public void setQuizName(String quizName) {
         this.quizName = quizName;
     }
 
-    public List<Question> getQuestionsList(){
+    public List<Question> getQuestionsList() {
         return questionsList;
     }
 
-    public void setQuestionsList(List<Question> questionsList){
+    public void setQuestionsList(List<Question> questionsList) {
         this.questionsList = questionsList;
     }
 
-    public Date getDateOfCreate(){
+    public Date getDateOfCreate() {
         return dateOfCreate;
     }
 
-    public void setDateOfCreate(Date dateOfCreate){
+    public void setDateOfCreate(Date dateOfCreate) {
         this.dateOfCreate = dateOfCreate;
     }
 }

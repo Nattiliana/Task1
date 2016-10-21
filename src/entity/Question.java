@@ -29,7 +29,8 @@ public class Question implements Comparator<Question> {
         this.rightAnswer = rightAnswer;
     }
 
-    public Question(){}
+    public Question() {
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -41,9 +42,9 @@ public class Question implements Comparator<Question> {
         }
         Question other = (Question) obj;
         if (question == null) {
-            if(other.question != null){
+            if (other.question != null) {
                 return false;
-            } else if (!question.equals(other.question)){
+            } else if (!question.equals(other.question)) {
                 return false;
             }
         }
@@ -64,35 +65,35 @@ public class Question implements Comparator<Question> {
                 + " Answers: " + answerMap + " Right answer: " + rightAnswer;
     }
 
-    public int getQuestionNumber(){
+    public int getQuestionNumber() {
         return questionNumber;
     }
 
-    public void setQuestionNumber(int questionNumber){
+    public void setQuestionNumber(int questionNumber) {
         this.questionNumber = questionNumber;
     }
 
-    public String getQuestion(){
-        return  question;
+    public String getQuestion() {
+        return question;
     }
 
-    public void setQuestion(String question){
+    public void setQuestion(String question) {
         this.question = question;
     }
 
-    public Map<Integer, String> getAnswerMap(){
+    public Map<Integer, String> getAnswerMap() {
         return answerMap;
     }
 
-    public void setAnswerMap(Map<Integer, String> answerMap){
+    public void setAnswerMap(Map<Integer, String> answerMap) {
         this.answerMap = answerMap;
     }
 
-    public int getRightAnswer(){
+    public int getRightAnswer() {
         return rightAnswer;
     }
 
-    public void setRightAnswer(int rightAnswer){
+    public void setRightAnswer(int rightAnswer) {
         this.rightAnswer = rightAnswer;
     }
 

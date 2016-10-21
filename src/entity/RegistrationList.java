@@ -40,19 +40,19 @@ public class RegistrationList {
         return "\nStudent: " + student + " Subjects list: " + subjectsList;
     }
 
-    public Student getStudent(){
+    public Student getStudent() {
         return student;
     }
 
-    public void setStudent(Student student){
+    public void setStudent(Student student) {
         this.student = student;
     }
 
-    public List<Subject> getSubjectsList(){
+    public List<Subject> getSubjectsList() {
         return subjectsList;
     }
 
-    public void setSubjectsList(List<Subject> subjectsList){
+    public void setSubjectsList(List<Subject> subjectsList) {
         this.subjectsList = subjectsList;
     }
 }

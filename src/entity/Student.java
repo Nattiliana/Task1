@@ -8,10 +8,10 @@ public class Student extends User {
     /**
      * Instantiates a new Student.
      *
-     * @param login        the login
-     * @param password     the password
-     * @param name         the name
-     * @param surname      the surname
+     * @param login    the login
+     * @param password the password
+     * @param name     the name
+     * @param surname  the surname
      */
     public Student(String login, String password, String name, String surname) {
         this.login = login;
