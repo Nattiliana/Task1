@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Nataly on 13.10.2016.
  */
-public class Tutor extends User implements Serializable {
+public class Tutor extends User implements Serializable, Login {
 
     /**
      * Instantiates a new Tutor.
@@ -77,5 +77,10 @@ public class Tutor extends User implements Serializable {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    @Override
+    public void login() {
+
     }
 }

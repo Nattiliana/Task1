@@ -3,7 +3,7 @@ package entity;
 /**
  * Created by Nataly on 13.10.2016.
  */
-public class Student extends User {
+public class Student extends User implements Login{
 
     /**
      * Instantiates a new Student.
@@ -74,5 +74,10 @@ public class Student extends User {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    @Override
+    public void login() {
+
     }
 }
