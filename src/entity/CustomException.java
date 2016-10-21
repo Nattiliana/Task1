@@ -2,7 +2,6 @@ package entity;
 
 /**
  * Created by Nataly on 21.10.2016.
- *
  */
 public class CustomException extends Exception {
 
