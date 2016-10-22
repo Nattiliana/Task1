@@ -3,7 +3,7 @@ package entity;
 /**
  * Created by Nataly on 13.10.2016.
  */
-public class Student extends User implements Login{
+public class Student extends User implements Loginable {
 
     /**
      * Instantiates a new Student.
@@ -25,9 +25,9 @@ public class Student extends User implements Login{
         if (this == obj) {
             return true;
         }
-        if ((obj instanceof Tutor)) {
-            Tutor otherTutor = (Tutor) obj;
-            if (otherTutor.login.equals(login)) {
+        if ((obj instanceof Student)) {
+            Student otherStudent = (Student) obj;
+            if (otherStudent.login.equals(login)) {
                 return true;
             }
         }
@@ -77,7 +77,11 @@ public class Student extends User implements Login{
     }
 
     @Override
-    public void login() {
-
+    public boolean login() {
+        if ((login.equals("login")) && (password.equals("pass"))) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Nataly on 13.10.2016.
  */
-public class Tutor extends User implements Serializable, Login {
+public class Tutor extends User implements Serializable, Loginable {
 
     /**
      * Instantiates a new Tutor.
@@ -20,6 +20,12 @@ public class Tutor extends User implements Serializable, Login {
         this.password = password;
         this.name = name;
         this.surname = surname;
+        count++;
+    }
+
+    public Tutor(String login, String password) {
+        this.login = login;
+        this.password = password;
         count++;
     }
 
@@ -80,7 +86,11 @@ public class Tutor extends User implements Serializable, Login {
     }
 
     @Override
-    public void login() {
-
+    public boolean login() {
+        if ((login.equals("login")) && (password.equals("pass"))) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
