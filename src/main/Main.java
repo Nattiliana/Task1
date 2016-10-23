@@ -16,16 +16,15 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        while (true) {
+        int selection = 0;
+        boolean isChosen = false;
+        do {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Please Make a selection:");
-            System.out.println("[1] Authorize");
-            System.out.println("[2] Open an existing record");
-            System.out.println("[3] exit");
-
+            Main.printEnum(Menu.class);
             System.out.println("Selection: ");
             try {
-                int selection = Integer.parseInt(bufferedReader.readLine());
+                selection = Integer.parseInt(bufferedReader.readLine());
                 if (selection == 3) {
                     break;
                 }
@@ -34,10 +33,16 @@ public class Main {
                     case 1:
                         System.out.println("Authorize");
                         Main.authorize();
+                        isChosen = true;
                         break;
 
                     case 2:
                         System.out.println("Opening existing record");
+                        isChosen = true;
+                        break;
+
+                    case 3:
+                        isChosen = true;
                         break;
 
                     default:
@@ -47,59 +52,19 @@ public class Main {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        }
+            catch (NumberFormatException ex) {
+                System.out.println("You should use numbers!");
+            }
+        } while (!isChosen);
 
 
         Tutor tutor = new Tutor("qwerty", "qwer", "John", "Snow");
-
-        System.out.println(tutor.toString());
+        Main.serialize(tutor);
+        Main.deserialize();
         Tutor tutor1 = new Tutor("ll", "qwe", "Johny", "Snow");
         System.out.println(tutor1.toString());
         System.out.println("Tutor's count: " + Tutor.count);
 
-        try
-
-        {
-            FileOutputStream fileOutputStream = new FileOutputStream("./tutors.txt");
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(tutor);
-            objectOutputStream.close();
-            fileOutputStream.close();
-            System.out.println("Serialized");
-        } catch (
-                IOException ex)
-
-        {
-            ex.printStackTrace();
-        }
-
-        System.out.println("-------------------------------------------------------------------");
-
-        Tutor tutor2;
-        try
-
-        {
-            FileInputStream fileInputStream = new FileInputStream("./tutors.txt");
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            tutor2 = (Tutor) objectInputStream.readObject();
-            objectInputStream.close();
-            fileInputStream.close();
-        } catch (
-                IOException ex)
-
-        {
-            ex.printStackTrace();
-            return;
-        } catch (
-                ClassNotFoundException e)
-
-        {
-            System.out.println("Class Tutor not found!");
-            e.printStackTrace();
-            return;
-        }
-        System.out.println("Deserialize object" + tutor2);
-        System.out.println("-------------------------------------------------------------------");
 
         Map<Integer, String> questionMap = new TreeMap<>();
         questionMap.put(1, "4");
@@ -107,28 +72,20 @@ public class Main {
         questionMap.put(3, "8");
         Question question = new Question(2, "5 + 3", questionMap, 3);
         Question question1 = new Question(1, "5 - 3", questionMap, 2);
-        System.out.println(question.toString());
         List<Question> questionsList = new ArrayList<>();
         questionsList.add(question);
         questionsList.add(question1);
 
         ListIterator iterator = questionsList.listIterator();
         while (iterator.hasNext())
-
         {
             System.out.println(iterator.next());
         }
 
-        Collections.sort(questionsList, new
+        Collections.sort(questionsList, new Question());
 
-                Question());
-
-        for (
-                Question q : questionsList)
-
-        {
-            System.out.println(q);
-        }
+        System.out.println("Sorted question list: ");
+        questionsList.forEach(System.out::println);
 
         GregorianCalendar calendar = new GregorianCalendar();
         Quiz quiz = new Quiz("quiz", questionsList, calendar.getTime());
@@ -213,7 +170,7 @@ public class Main {
         }*/
     }
 
-    public static void authorize() {
+    private static void authorize() {
         boolean isChecked = false;
         do {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -248,4 +205,53 @@ public class Main {
         while (!isChecked);
 
     }
+
+    private static void serialize(Object object) {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream("./tutors.txt");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(object);
+            objectOutputStream.close();
+            fileOutputStream.close();
+            System.out.println("Serialized");
+        } catch (
+                IOException ex)
+
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    private static void deserialize() {
+        Object object;
+        try {
+            FileInputStream fileInputStream = new FileInputStream("./tutors.txt");
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            object = objectInputStream.readObject();
+            objectInputStream.close();
+            fileInputStream.close();
+        } catch (
+                IOException ex)
+
+        {
+            ex.printStackTrace();
+            return;
+        } catch (
+                ClassNotFoundException e)
+
+        {
+            System.out.println("Class not found!");
+            e.printStackTrace();
+            return;
+        }
+        System.out.println("Deserialize object" + object);
+    }
+
+    public static <T extends Enum<T>> void printEnum(Class<T> enumClass) {
+        for (Enum<T> item : enumClass.getEnumConstants()) {
+            System.out.println(item.toString());
+        }
+    }
 }
+
+
