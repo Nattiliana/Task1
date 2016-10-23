@@ -1,5 +1,7 @@
 package entity;
 
+import java.io.IOException;
+
 /**
  * Created by Nataly on 13.10.2016.
  */
@@ -77,8 +79,8 @@ public class Student extends User implements Loginable {
     }
 
     @Override
-    public boolean login() {
-        if ((login.equals("login")) && (password.equals("pass"))) {
+    public boolean login() throws IOException {
+        if ((login.equals(Reader.readLoginFromFile())) && (password.equals(Reader.readPassFromFile()))) {
             return true;
         } else {
             return false;

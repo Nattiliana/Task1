@@ -1,5 +1,6 @@
 package entity;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -86,11 +87,13 @@ public class Tutor extends User implements Serializable, Loginable {
     }
 
     @Override
-    public boolean login() {
-        if ((login.equals("login")) && (password.equals("pass"))) {
+    public boolean login() throws IOException {
+        if ((login.equals(Reader.readLoginFromFile())) && (password.equals(Reader.readPassFromFile()))) {
             return true;
         } else {
             return false;
         }
+
+
     }
 }
