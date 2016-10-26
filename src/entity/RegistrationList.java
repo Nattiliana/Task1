@@ -9,11 +9,11 @@ import java.util.List;
 public class RegistrationList {
 
     private Student student;
-    private List<Subject> subjectsList = new ArrayList<>();
+    private List<Quiz> quizList = new ArrayList<>();
 
-    public RegistrationList(Student student, List<Subject> subjectsList) {
+    public RegistrationList(Student student, List<Quiz> quizList) {
         this.student = student;
-        this.subjectsList = subjectsList;
+        this.quizList = quizList;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class RegistrationList {
 
     @Override
     public String toString() {
-        return "\nStudent: " + student + " Subjects list: " + subjectsList;
+        return "\nStudent: " + student + " Subjects list: " + quizList;
     }
 
     public Student getStudent() {
@@ -48,11 +48,11 @@ public class RegistrationList {
         this.student = student;
     }
 
-    public List<Subject> getSubjectsList() {
-        return subjectsList;
+    public List<Quiz> getQuizList() {
+        return quizList;
     }
 
-    public void setSubjectsList(List<Subject> subjectsList) {
-        this.subjectsList = subjectsList;
+    public void setQuizList(List<Quiz> subjectsList) {
+        this.quizList = quizList;
     }
 }

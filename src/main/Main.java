@@ -1,6 +1,7 @@
 package main;
 
 import entity.*;
+import entity.Reader;
 
 import java.io.*;
 import java.util.*;
@@ -16,201 +17,75 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        int selection = 0;
-        boolean isChosen = false;
-        do {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Please Make a selection:");
-            Main.printEnum(Menu.class);
-            System.out.println("Selection: ");
-            try {
-                selection = Integer.parseInt(bufferedReader.readLine());
-                if (selection == 3) {
-                    break;
-                }
-                switch (selection) {
+        Menu menu = new Menu();
+        menu.addEntry(new MenuItem(Item1.AUTHORIZE_T.toString()) {
+            @Override
+            public void run() {
+                System.out.println(Item1.AUTHORIZE_T.getMessage());
+                Tutor.authorize();
+                Menu tutorMenu = new Menu();
+                tutorMenu.addEntry(new MenuItem(Item2.CREATE_QUIZ.toString()) {
+                    @Override
+                    public void run() {
+                        try {
+                            System.out.println(Item2.CREATE_QUIZ.getMessage());
+                            List<Question> questionsList = new ArrayList<>();
+                            questionsList.add(createQuestion(2));
+                            questionsList.add(createQuestion(1));
+                            questionsList.add(createQuestion(3));
+                            System.out.println("count: " + Question.count);
+                            Quiz quiz = Main.createQuiz(questionsList);
+                            System.out.println("Your quiz: " + quiz);
+                            Main.serialize(quiz);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                tutorMenu.run();
 
-                    case 1:
-                        System.out.println("Authorize");
-                        Main.authorize();
-                        isChosen = true;
-                        break;
-
-                    case 2:
-                        System.out.println("Opening existing record");
-                        isChosen = true;
-                        break;
-
-                    case 3:
-                        isChosen = true;
-                        break;
-
-                    default:
-                        System.out.println("Please, enter a valid selection.");
-
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
             }
-            catch (NumberFormatException ex) {
-                System.out.println("You should use numbers!");
+        });
+        menu.addEntry(new MenuItem(Item1.AUTHORIZE_S.toString()) {
+            @Override
+            public void run() {
+                System.out.println(Item1.AUTHORIZE_S.getMessage());
+                Student.authorize();
+                Menu studentMenu = new Menu();
+                studentMenu.addEntry(new MenuItem(Item2.ANSWER_QUIZ.toString()) {
+                    @Override
+                    public void run() {
+                        System.out.println(Item2.ANSWER_QUIZ.getMessage());
+                        Main.deserialize();
+                        for (int i = 0; i < 2; i++) {
+                            try {
+                                System.out.println("Enter the answer for " + (i + 1) + " question");
+                                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+                                int answer = Integer.parseInt(bufferedReader.readLine());
+                                int correctAnswer = Reader.readAnswersFromFile("answers.txt").get(i);
+                                if (answer == correctAnswer){
+                                    System.out.println("Your answer is correct!");
+                                }
+                                else {
+                                    System.out.println("Your answer is wrong!");
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+                studentMenu.run();
             }
-        } while (!isChosen);
+        });
+        menu.run();
+    }
 
-
-        Tutor tutor = new Tutor("qwerty", "qwer", "John", "Snow");
-        Main.serialize(tutor);
-        Main.deserialize();
-        Tutor tutor1 = new Tutor("ll", "qwe", "Johny", "Snow");
-        System.out.println(tutor1.toString());
-        System.out.println("Tutor's count: " + Tutor.count);
-
-
-        Map<Integer, String> questionMap = new TreeMap<>();
-        questionMap.put(1, "4");
-        questionMap.put(2, "2");
-        questionMap.put(3, "8");
-        Question question = new Question(2, "5 + 3", questionMap, 3);
-        Question question1 = new Question(1, "5 - 3", questionMap, 2);
-        List<Question> questionsList = new ArrayList<>();
-        questionsList.add(question);
-        questionsList.add(question1);
-
-        ListIterator iterator = questionsList.listIterator();
-        while (iterator.hasNext())
-        {
-            System.out.println(iterator.next());
-        }
-
-        Collections.sort(questionsList, new Question());
-
-        System.out.println("Sorted question list: ");
-        questionsList.forEach(System.out::println);
-
-        GregorianCalendar calendar = new GregorianCalendar();
-        Quiz quiz = new Quiz("quiz", questionsList, calendar.getTime());
-        System.out.println(quiz.toString());
-        List<Quiz> quizList = new ArrayList<>();
-        quizList.add(quiz);
-
-        Subject subject = new Subject("EMP", quizList);
-        System.out.println("Subject's count: " + Subject.count);
-        System.out.println(subject.toString());
-
-        List<Subject> studentSubjectList = new ArrayList<>();
-        studentSubjectList.add(subject);
-
-
-        Student student = new Student("qw", "qwee", "James", "Fr");
-        System.out.println(student.toString());
-
-        RegistrationList registrationList = new RegistrationList(student, studentSubjectList);
-        System.out.println(registrationList);
-
-        /*System.out.println("Menu");
-        for (Menu menu : Menu.values()) {
-            System.out.println(menu);
-        }
-
-        System.out.println("Choose menu item");
+    public static void serialize(Quiz quiz) {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-            Menu.runCommand(Integer.parseInt(bufferedReader.readLine()));
-        }
-        catch (IOException ex){
-            ex.printStackTrace();
-        }
-
-        Map<Integer, Menu> enumMap = new HashMap<>();
-        enumMap.put(1, Menu.CREATE_STUDENT);
-        for (Map.Entry entry : enumMap.entrySet()){
-            System.out.print(entry.getKey());
-            System.out.println(entry.getValue());
-        }
-
-    }
-
-    private enum Menu {
-        CREATE_TUTOR(1, "Create tutor"),
-        CREATE_STUDENT(2, "Create student"),
-        CREATE_QUESTION(3, "Create question"),
-        CREATE_QUIZ(4, "Create quiz"),
-        CREATE_SUBJECT(5, "Create subject"),
-        CREATE_LIST(6, "Create registration list"),
-        EXIT(7, "Exit");
-
-        private final String message;
-        private final int code;
-
-        public static Menu get(int code) {
-            for (Menu c : Menu.values()) {
-                if (code == c.code) {
-                    return c;
-                }
-            }
-            return null;
-        }
-
-        Menu(int code, String message) {
-            this.code = code;
-            this.message = message;
-        }
-
-        public int getCode() {
-            return this.code;
-        }
-
-        public String getMessage() {
-            return this.message;
-        }
-
-        protected static void runCommand(int choice) {
-            Menu command = Menu.get(choice);
-            System.out.println("You Chose '" + command.getMessage() + "'\n\n");
-        }*/
-    }
-
-    private static void authorize() {
-        boolean isChecked = false;
-        do {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Enter login");
-            String login = null;
-            try {
-                login = bufferedReader.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Enter password");
-            String pass = null;
-            try {
-                pass = bufferedReader.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Tutor tutor5 = new Tutor(login, pass);
-            try {
-                if (tutor5.login()) {
-                    tutor5.setName(entity.Reader.readNameFromFile());
-                    tutor5.setSurname(entity.Reader.readSurnameFromFile());
-                    System.out.println("Welcome, " + tutor5.getName() + " " + tutor5.getSurname());
-                    isChecked = true;
-                } else {
-                    System.out.println("Try again!");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        while (!isChecked);
-
-    }
-
-    private static void serialize(Object object) {
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream("./tutors.txt");
+            FileOutputStream fileOutputStream = new FileOutputStream("serialize.txt");
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(object);
+            objectOutputStream.writeObject(quiz);
             objectOutputStream.close();
             fileOutputStream.close();
             System.out.println("Serialized");
@@ -222,36 +97,174 @@ public class Main {
         }
     }
 
-    private static void deserialize() {
-        Object object;
+    public static void deserialize() {
+        Quiz quiz;
         try {
-            FileInputStream fileInputStream = new FileInputStream("./tutors.txt");
+            FileInputStream fileInputStream = new FileInputStream("serialize.txt");
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            object = objectInputStream.readObject();
+            quiz = (Quiz) objectInputStream.readObject();
             objectInputStream.close();
             fileInputStream.close();
-        } catch (
-                IOException ex)
-
-        {
+        } catch (IOException ex) {
             ex.printStackTrace();
             return;
-        } catch (
-                ClassNotFoundException e)
-
-        {
+        } catch (ClassNotFoundException e) {
             System.out.println("Class not found!");
             e.printStackTrace();
             return;
         }
-        System.out.println("Deserialize object" + object);
+        System.out.println("Deserialize object" + quiz);
     }
 
-    public static <T extends Enum<T>> void printEnum(Class<T> enumClass) {
-        for (Enum<T> item : enumClass.getEnumConstants()) {
-            System.out.println(item.toString());
+    public static void writeAnswersToFile(String fileName, int answer) {
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileOutputStream = new FileOutputStream(fileName, true);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
+        try {
+            bufferedWriter.append("Right answer: " + answer);
+            bufferedWriter.flush();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                bufferedWriter.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+            try {
+                fileOutputStream.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
+
+    private static Question createQuestion(int questionNumber) throws IOException {
+
+        boolean isChecked = false;
+        int number = 0;
+        int rightAnswer = 0;
+        Map<Integer, String> questionMap = new TreeMap<>();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter question text: ");
+        String questionText = bufferedReader.readLine();
+        do {
+            System.out.println("Enter the number of answers: ");
+            try {
+                number = Integer.parseInt(bufferedReader.readLine());
+                if (number < 0) {
+                    throw new OutOfSelectionException();
+                }
+                isChecked = true;
+            } catch (NumberFormatException ex) {
+                System.out.println("You should use numbers!");
+            } catch (OutOfSelectionException e) {
+                System.out.println("Please, enter a valid number.");
+            }
+        }
+        while (!isChecked);
+        System.out.println("Enter answers: ");
+        for (int i = 0; i < number; i++) {
+            String answer = bufferedReader.readLine();
+            questionMap.put(i + 1, answer);
+        }
+        isChecked = false;
+        do {
+            System.out.println("Enter right answer number: ");
+            try {
+                rightAnswer = Integer.parseInt(bufferedReader.readLine());
+                if (rightAnswer < 0) {
+                    throw new OutOfSelectionException();
+                }
+                if (rightAnswer > number) {
+                    throw new OutOfSelectionException();
+                }
+                Main.writeAnswersToFile("answers.txt", rightAnswer);
+                isChecked = true;
+            } catch (NumberFormatException ex) {
+                System.out.println("You should use numbers!");
+            } catch (OutOfSelectionException e) {
+                System.out.println("Please, enter a valid number of answer.");
+            }
+        } while (!isChecked);
+        Question question = new Question(questionNumber, questionText, questionMap, rightAnswer);
+        return question;
+    }
+
+    public static Quiz createQuiz(List<Question> list) throws IOException {
+        GregorianCalendar calendar = new GregorianCalendar();
+        boolean isChecked = false;
+        String subjectName = null;
+        String quizName = null;
+        int number = 0;
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        do {
+            System.out.println("Enter subject name: ");
+            try {
+                subjectName = bufferedReader.readLine();
+                if (subjectName.equals(null)) {
+                    throw new OutOfSelectionException();
+                }
+                isChecked = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (OutOfSelectionException e) {
+                System.out.println("Please, enter a valid subject.");
+            }
+        } while (!isChecked);
+        Subject subject = new Subject(subjectName);
+        isChecked = false;
+        do {
+            System.out.println("Enter quiz name: ");
+            try {
+                quizName = bufferedReader.readLine();
+                if (quizName.equals(null)) {
+                    throw new OutOfSelectionException();
+                }
+                isChecked = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (OutOfSelectionException e) {
+                System.out.println("Please, enter a valid name of quiz.");
+            }
+        } while (!isChecked);
+        System.out.println("Choose 2 questions");
+        Collections.sort(list, new Question());
+        ListIterator iterator = list.listIterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+        isChecked = false;
+        List<Question> newList = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            do {
+                System.out.println("Enter " + (i + 1) + " question number : ");
+                try {
+                    number = Integer.parseInt(bufferedReader.readLine());
+                    if (number < 0) {
+                        throw new OutOfSelectionException();
+                    }
+                    if (number > list.size()) {
+                        throw new OutOfSelectionException();
+                    }
+                    isChecked = true;
+                } catch (NumberFormatException ex) {
+                    System.out.println("You should use numbers!");
+                } catch (OutOfSelectionException e) {
+                    System.out.println("Please, enter a valid number of answer.");
+                }
+            } while (!isChecked);
+            newList.add(list.get(number - 1));
+        }
+        Quiz quiz = new Quiz(quizName, subject, newList, calendar.getTime());
+        return quiz;
+    }
+
 }
 
 

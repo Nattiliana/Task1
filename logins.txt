@@ -1,4 +1,0 @@
-Login: 1
-Pass: qwe
-Name: Qan
-Surname: Tor

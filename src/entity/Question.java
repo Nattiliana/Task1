@@ -1,18 +1,18 @@
 package entity;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.TreeMap;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Created by Nataly on 13.10.2016.
  */
-public class Question implements Comparator<Question> {
+public class Question implements Comparator<Question>, Serializable {
 
     private int questionNumber;
     private String question;
     private Map<Integer, String> answerMap = new TreeMap<>();
     private int rightAnswer;
+    public static int count;
 
     /**
      * Instantiates a new Question.
@@ -27,9 +27,11 @@ public class Question implements Comparator<Question> {
         this.question = question;
         this.answerMap = answerMap;
         this.rightAnswer = rightAnswer;
+        count++;
     }
 
     public Question() {
+        count++;
     }
 
     @Override
@@ -63,6 +65,11 @@ public class Question implements Comparator<Question> {
     public String toString() {
         return "\nQuestion number: " + questionNumber + " Question: " + question
                 + " Answers: " + answerMap + " Right answer: " + rightAnswer;
+    }
+
+    public String toStringForStudent() {
+        return "\nQuestion number: " + questionNumber + " Question: " + question
+                + " Answers: " + answerMap;
     }
 
     public int getQuestionNumber() {
@@ -101,4 +108,5 @@ public class Question implements Comparator<Question> {
     public int compare(Question q1, Question q2) {
         return q1.questionNumber - q2.questionNumber;
     }
+
 }

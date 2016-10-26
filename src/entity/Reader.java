@@ -1,9 +1,8 @@
 package entity;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -12,10 +11,11 @@ import java.util.StringTokenizer;
  */
 public class Reader {
 
-    public static String readLoginFromFile() throws IOException {
+    public static String readLoginFromFile(String fileName) throws IOException {
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader("logins.txt"));
+            File file = new File(fileName);
+            bufferedReader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -36,10 +36,11 @@ public class Reader {
         return loginFromFile;
     }
 
-    public static String readPassFromFile() throws IOException {
+    public static String readPassFromFile(String fileName) throws IOException {
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader("logins.txt"));
+            File file = new File(fileName);
+            bufferedReader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -60,10 +61,11 @@ public class Reader {
         return passFromFile;
     }
 
-    public static String readNameFromFile() throws IOException {
+    public static String readNameFromFile(String fileName) throws IOException {
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader("logins.txt"));
+            File file = new File(fileName);
+            bufferedReader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -84,10 +86,11 @@ public class Reader {
         return nameFromFile;
     }
 
-    public static String readSurnameFromFile() throws IOException {
+    public static String readSurnameFromFile(String fileName) throws IOException {
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader("logins.txt"));
+            File file = new File(fileName);
+            bufferedReader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -106,5 +109,50 @@ public class Reader {
             e.printStackTrace();
         }
         return surnameFromFile;
+    }
+
+    public static List<String> readQuizFromFile(String fileName) throws IOException {
+        BufferedReader bufferedReader = null;
+        try {
+            File file = new File(fileName);
+            bufferedReader = new BufferedReader(new FileReader(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        String line;
+        List<String> list = new ArrayList<>();
+        try {
+            while ((line = bufferedReader.readLine()) != null) {
+                list.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static List<Integer> readAnswersFromFile(String fileName) throws IOException {
+        BufferedReader bufferedReader = null;
+        try {
+            File file = new File(fileName);
+            bufferedReader = new BufferedReader(new FileReader(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        String line;
+        List<Integer> list = new ArrayList<>();
+        try {
+            while ((line = bufferedReader.readLine()) != null) {
+                StringTokenizer stringTokenizer = new StringTokenizer(line);
+                while (stringTokenizer.hasMoreTokens()) {
+                    if (stringTokenizer.nextToken().contains("Right answer:")) {
+                        list.add(Integer.parseInt(stringTokenizer.nextToken()));
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

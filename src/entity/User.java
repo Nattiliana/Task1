@@ -11,6 +11,5 @@ abstract public class User implements Serializable {
     protected transient String password;
     protected String name;
     protected String surname;
-    public static int count;
 }
 

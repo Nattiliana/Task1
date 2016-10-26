@@ -1,6 +1,8 @@
 package entity;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 
 /**
@@ -21,13 +23,11 @@ public class Tutor extends User implements Serializable, Loginable {
         this.password = password;
         this.name = name;
         this.surname = surname;
-        count++;
     }
 
     public Tutor(String login, String password) {
         this.login = login;
         this.password = password;
-        count++;
     }
 
     @Override
@@ -88,12 +88,44 @@ public class Tutor extends User implements Serializable, Loginable {
 
     @Override
     public boolean login() throws IOException {
-        if ((login.equals(Reader.readLoginFromFile())) && (password.equals(Reader.readPassFromFile()))) {
+        if ((login.equals(Reader.readLoginFromFile("tutor.txt"))) && (password.equals(Reader.readPassFromFile("tutor.txt")))) {
             return true;
         } else {
             return false;
         }
-
-
+    }
+    public static void authorize() {
+        boolean isChecked = false;
+        do {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Enter login");
+            String login = null;
+            try {
+                login = bufferedReader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Enter password");
+            String pass = null;
+            try {
+                pass = bufferedReader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Tutor tutor = new Tutor(login, pass);
+            try {
+                if (tutor.login()) {
+                    tutor.setName(entity.Reader.readNameFromFile("tutor.txt"));
+                    tutor.setSurname(entity.Reader.readSurnameFromFile("tutor.txt"));
+                    System.out.println("Welcome, " + tutor.getName() + " " + tutor.getSurname());
+                    isChecked = true;
+                } else {
+                    System.out.println("Try again!");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        while (!isChecked);
     }
 }

@@ -1,27 +1,21 @@
 package entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * Created by Nataly on 13.10.2016.
  */
-public class Subject {
+public class Subject implements Serializable {
 
     private String subjectName;
-    private List<Quiz> quizList = new ArrayList<>();
-    public static int count;
 
     /**
      * Instantiates a new Subject.
      *
      * @param subjectName the subject name
-     * @param quizList    the quiz list
      */
-    public Subject(String subjectName, List<Quiz> quizList) {
+    public Subject(String subjectName) {
         this.subjectName = subjectName;
-        this.quizList = quizList;
-        count++;
     }
 
     public Subject() {
@@ -48,7 +42,7 @@ public class Subject {
 
     @Override
     public String toString() {
-        return "\nSubject name: " + subjectName + " Quiz list: " + quizList;
+        return "\nSubject name: " + subjectName;
     }
 
     public String getSubjectName() {
@@ -57,13 +51,5 @@ public class Subject {
 
     public void setSubjectName(String subjectName) {
         this.subjectName = subjectName;
-    }
-
-    public List<Quiz> getQuizList() {
-        return quizList;
-    }
-
-    public void setQuizList(List<Quiz> quizList) {
-        this.quizList = quizList;
     }
 }

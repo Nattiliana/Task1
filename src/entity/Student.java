@@ -1,6 +1,8 @@
 package entity;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * Created by Nataly on 13.10.2016.
@@ -20,6 +22,11 @@ public class Student extends User implements Loginable {
         this.password = password;
         this.name = name;
         this.surname = surname;
+    }
+
+    public Student(String login, String password) {
+        this.login = login;
+        this.password = password;
     }
 
     @Override
@@ -80,10 +87,45 @@ public class Student extends User implements Loginable {
 
     @Override
     public boolean login() throws IOException {
-        if ((login.equals(Reader.readLoginFromFile())) && (password.equals(Reader.readPassFromFile()))) {
+        if ((login.equals(Reader.readLoginFromFile("student.txt"))) && (password.equals(Reader.readPassFromFile("student.txt")))) {
             return true;
         } else {
             return false;
         }
+    }
+
+    public static void authorize() {
+        boolean isChecked = false;
+        do {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Enter login");
+            String login = null;
+            try {
+                login = bufferedReader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Enter password");
+            String pass = null;
+            try {
+                pass = bufferedReader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Student student = new Student(login, pass);
+            try {
+                if (student.login()) {
+                    student.setName(entity.Reader.readNameFromFile("student.txt"));
+                    student.setSurname(entity.Reader.readSurnameFromFile("student.txt"));
+                    System.out.println("Welcome, " + student.getName() + " " + student.getSurname());
+                    isChecked = true;
+                } else {
+                    System.out.println("Try again!");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        while (!isChecked);
     }
 }
