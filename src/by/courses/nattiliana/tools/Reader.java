@@ -119,28 +119,6 @@ public class Reader {
         return surnameFromFile;
     }
 
-    public static List<String> readQuizFromFile(String fileName) throws IOException {
-        BufferedReader bufferedReader = null;
-        try {
-            File file = new File(fileName);
-            bufferedReader = new BufferedReader(new FileReader(file));
-        } catch (FileNotFoundException e) {
-            e.getMessage();
-        }
-        String line;
-        List<String> list = new ArrayList<>();
-        try {
-            if (bufferedReader != null) {
-                while ((line = bufferedReader.readLine()) != null) {
-                    list.add(line);
-                }
-            }
-        } catch (IOException e) {
-            e.getMessage();
-        }
-        return list;
-    }
-
     public static List<Integer> readAnswersFromFile(String fileName) throws IOException {
         BufferedReader bufferedReader = null;
         try {
@@ -156,7 +134,7 @@ public class Reader {
                 while ((line = bufferedReader.readLine()) != null) {
                     StringTokenizer stringTokenizer = new StringTokenizer(line);
                     while (stringTokenizer.hasMoreTokens()) {
-                        if (stringTokenizer.nextToken().contains("Right answer:")) {
+                        if (stringTokenizer.nextToken().contains("q")) {
                             list.add(Integer.parseInt(stringTokenizer.nextToken()));
                         }
                     }

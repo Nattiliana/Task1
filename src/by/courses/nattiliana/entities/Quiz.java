@@ -29,6 +29,9 @@ public class Quiz implements Serializable{
         this.dateOfCreate = dateOfCreate;
     }
 
+    public Quiz() {
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -54,7 +57,7 @@ public class Quiz implements Serializable{
     }
 
     public String getQuizName() {
-        return quizName;
+        return "\nQuiz name: " + quizName;
     }
 
     public void setQuizName(String quizName) {

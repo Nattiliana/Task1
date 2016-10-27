@@ -1,6 +1,6 @@
 package by.courses.nattiliana.entities;
 
-import by.courses.nattiliana.tools.*;
+import by.courses.nattiliana.tools.Reader;
 
 import java.io.*;
 
@@ -128,31 +128,36 @@ public class Student extends User {
     }
 
     public static void deserialize() {
-        Quiz quiz;
         String serializeFileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\serialize.txt";
         try (FileInputStream fileInputStream = new FileInputStream(serializeFileName);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
-            quiz = (Quiz) objectInputStream.readObject();
+            while ((fileInputStream.available()) > 0 ) {
+                Quiz quiz = (Quiz) objectInputStream.readObject();
+                System.out.println("Deserialize object");
+                System.out.println(quiz.getQuizName() + quiz.getSubject() + quiz.getDateOfCreate());
+                for (int i =0; i < quiz.getQuestionsList().size(); i++){
+                    System.out.println(quiz.getQuestionsList().get(i).toStringForStudent());
+                }
+            }
         } catch (IOException ex) {
             ex.getMessage();
-            return;
         } catch (ClassNotFoundException e) {
             System.out.println("Class not found!");
             e.getMessage();
-            return;
         }
-        System.out.println("Deserialize object" + quiz);
     }
 
-    public static void passTheQuiz() throws IOException {
-        for (int i = 0; i < 2; i++) {
+    public static int passTheQuiz() throws IOException {
+        int count = 0;
+        for (int i = 0; i < Question.count; i++) {
             try {
                 System.out.println("Enter the answer for " + (i + 1) + " question");
                 BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
                 int answer = Integer.parseInt(bf.readLine());
-                int correctAnswer = by.courses.nattiliana.tools.Reader.readAnswersFromFile(answersFileName).get(i);
+                int correctAnswer = Reader.readAnswersFromFile(answersFileName).get(i);
                 if (answer == correctAnswer) {
                     System.out.println("Your answer is correct!");
+                    count++;
                 } else {
                     System.out.println("Your answer is wrong!");
                 }
@@ -160,5 +165,6 @@ public class Student extends User {
                 System.out.println("List is empty!");
             }
         }
+        return count;
     }
 }

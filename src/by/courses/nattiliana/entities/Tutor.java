@@ -140,9 +140,9 @@ public class Tutor extends User implements Serializable {
     }
 
     private static void writeAnswersToFile(String fileName, int answer, int number) {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName, true);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName);
              BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream))) {
-            bufferedWriter.append("Question " + number + " Right answer: " + answer + "\n");
+            bufferedWriter.append("q" + number + ": " + answer + " ");
             bufferedWriter.flush();
         } catch (IOException ex) {
             ex.getMessage();
@@ -159,7 +159,7 @@ public class Tutor extends User implements Serializable {
         System.out.println("Enter question text: ");
         String questionText = bufferedReader.readLine();
         do {
-            System.out.println("Enter the number of answers: ");
+            System.out.println("Enter the amount of answers: ");
             try {
                 number = Integer.parseInt(bufferedReader.readLine());
                 if (number < 0) {
@@ -167,7 +167,7 @@ public class Tutor extends User implements Serializable {
                 }
                 isChecked = true;
             } catch (NumberFormatException ex) {
-                System.out.println("You should use numbers!");
+                System.out.println("You should use numbers!!");
             } catch (OutOfSelectionException e) {
                 System.out.println("Please, enter a valid number.");
             }
@@ -189,8 +189,6 @@ public class Tutor extends User implements Serializable {
                 if (rightAnswer > number) {
                     throw new OutOfSelectionException();
                 }
-                String answersFileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\answers.txt";
-                Tutor.writeAnswersToFile(answersFileName, rightAnswer, questionNumber);
                 isChecked = true;
             } catch (NumberFormatException ex) {
                 System.out.println("You should use numbers!");
@@ -201,12 +199,12 @@ public class Tutor extends User implements Serializable {
         return new Question(questionNumber, questionText, questionMap, rightAnswer);
     }
 
-    public static Quiz createQuiz(List<Question> list) throws IOException {
+    public static Quiz createQuiz() throws IOException {
         GregorianCalendar calendar = new GregorianCalendar();
         boolean isChecked = false;
         String subjectName = null;
         String quizName = null;
-        int number = 0;
+        int amountOfQuestions = 0;
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         do {
             System.out.println("Enter subject name: ");
@@ -238,34 +236,34 @@ public class Tutor extends User implements Serializable {
                 System.out.println("Please, enter a valid name of quiz.");
             }
         } while (!isChecked);
-        System.out.println("Choose 2 questions");
+        isChecked = false;
+        do {
+            System.out.println("Enter the amount of questions in quiz: ");
+            try {
+                amountOfQuestions = Integer.parseInt(bufferedReader.readLine());
+                if (amountOfQuestions < 0) {
+                    throw new OutOfSelectionException();
+                }
+                isChecked = true;
+            } catch (NumberFormatException ex) {
+                System.out.println("You should use numbers");
+            } catch (OutOfSelectionException e) {
+                System.out.println("Please, enter a valid number.");
+            }
+        }
+        while (!isChecked);
+        List<Question> list = new ArrayList<>();
+        for (int i = 0; i < amountOfQuestions; i++){
+            Question question = createQuestion(i+1);
+            list.add(question);
+        }
         Collections.sort(list, new Question());
+        String answersFileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\answers.txt";
         ListIterator iterator = list.listIterator();
         while (iterator.hasNext()) {
-            System.out.println(iterator.next());
+            Question question = (Question)iterator.next();
+            writeAnswersToFile(answersFileName, question.getRightAnswer(), question.getQuestionNumber());
         }
-        isChecked = false;
-        List<Question> newList = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            do {
-                System.out.println("Enter " + (i + 1) + " question number : ");
-                try {
-                    number = Integer.parseInt(bufferedReader.readLine());
-                    if (number < 0) {
-                        throw new OutOfSelectionException();
-                    }
-                    if (number > list.size()) {
-                        throw new OutOfSelectionException();
-                    }
-                    isChecked = true;
-                } catch (NumberFormatException ex) {
-                    System.out.println("You should use numbers!");
-                } catch (OutOfSelectionException e) {
-                    System.out.println("Please, enter a valid number of answer.");
-                }
-            } while (!isChecked);
-            newList.add(list.get(number - 1));
-        }
-        return new Quiz(quizName, subject, newList, calendar.getTime());
+        return new Quiz(quizName, subject, list, calendar.getTime());
     }
 }

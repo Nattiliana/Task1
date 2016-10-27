@@ -42,7 +42,7 @@ public class Subject implements Serializable {
 
     @Override
     public String toString() {
-        return "\nSubject name: " + subjectName;
+        return "\nSubject name: " + subjectName + "\n";
     }
 
     public String getSubjectName() {

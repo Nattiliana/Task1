@@ -1,19 +1,16 @@
 package by.courses.nattiliana.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Nataly on 18.10.2016.
  */
-class RegistrationList {
+public class RegistrationList {
 
     private Student student;
-    private List<Quiz> quizList = new ArrayList<>();
+    private int amountOfRightAnswers;
 
-    public RegistrationList(Student student, List<Quiz> quizList) {
+    public RegistrationList(Student student, int amountOfRightAnswers) {
         this.student = student;
-        this.quizList = quizList;
+        this.amountOfRightAnswers = amountOfRightAnswers;
     }
 
     @Override
@@ -37,7 +34,7 @@ class RegistrationList {
 
     @Override
     public String toString() {
-        return "\nStudent: " + student + " Subjects list: " + quizList;
+        return "\nStudent: " + student + " Amount of right answers: " + amountOfRightAnswers;
     }
 
     public Student getStudent() {
@@ -48,11 +45,11 @@ class RegistrationList {
         this.student = student;
     }
 
-    public List<Quiz> getQuizList() {
-        return quizList;
+    public int getAmountOfRightAnswers() {
+        return amountOfRightAnswers;
     }
 
-    public void setQuizList(List<Quiz> quizList) {
-        this.quizList = quizList;
+    public void setAmountOfRightAnswers(int amountOfRightAnswers) {
+        this.amountOfRightAnswers = amountOfRightAnswers;
     }
 }

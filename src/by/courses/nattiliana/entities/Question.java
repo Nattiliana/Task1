@@ -31,7 +31,7 @@ public class Question implements Comparator<Question>, Serializable {
     }
 
     public Question() {
-        count++;
+
     }
 
     @Override
