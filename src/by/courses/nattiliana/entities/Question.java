@@ -1,4 +1,4 @@
-package entity;
+package by.courses.nattiliana.entities;
 
 import java.io.Serializable;
 import java.util.*;
@@ -11,7 +11,7 @@ public class Question implements Comparator<Question>, Serializable {
     private int questionNumber;
     private String question;
     private Map<Integer, String> answerMap = new TreeMap<>();
-    private int rightAnswer;
+    private transient int rightAnswer;
     public static int count;
 
     /**
@@ -50,10 +50,7 @@ public class Question implements Comparator<Question>, Serializable {
                 return false;
             }
         }
-        if (questionNumber != other.questionNumber) {
-            return false;
-        }
-        return true;
+        return questionNumber == other.questionNumber;
     }
 
     @Override

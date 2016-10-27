@@ -1,4 +1,4 @@
-package entity;
+package by.courses.nattiliana.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by Nataly on 18.10.2016.
  */
-public class RegistrationList {
+class RegistrationList {
 
     private Student student;
     private List<Quiz> quizList = new ArrayList<>();
@@ -52,7 +52,7 @@ public class RegistrationList {
         return quizList;
     }
 
-    public void setQuizList(List<Quiz> subjectsList) {
+    public void setQuizList(List<Quiz> quizList) {
         this.quizList = quizList;
     }
 }

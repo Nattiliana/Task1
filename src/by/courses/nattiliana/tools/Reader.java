@@ -1,4 +1,4 @@
-package entity;
+package by.courses.nattiliana.tools;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,21 +17,23 @@ public class Reader {
             File file = new File(fileName);
             bufferedReader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         String line;
         String loginFromFile = null;
         try {
-            while ((line = bufferedReader.readLine()) != null) {
-                StringTokenizer stringTokenizer = new StringTokenizer(line);
-                while (stringTokenizer.hasMoreTokens()) {
-                    if (stringTokenizer.nextToken().contains("Login")) {
-                        loginFromFile = stringTokenizer.nextToken();
+            if (bufferedReader != null) {
+                while ((line = bufferedReader.readLine()) != null) {
+                    StringTokenizer stringTokenizer = new StringTokenizer(line);
+                    while (stringTokenizer.hasMoreTokens()) {
+                        if (stringTokenizer.nextToken().contains("Login")) {
+                            loginFromFile = stringTokenizer.nextToken();
+                        }
                     }
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return loginFromFile;
     }
@@ -42,21 +44,23 @@ public class Reader {
             File file = new File(fileName);
             bufferedReader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         String line;
         String passFromFile = null;
         try {
-            while ((line = bufferedReader.readLine()) != null) {
-                StringTokenizer stringTokenizer = new StringTokenizer(line);
-                while (stringTokenizer.hasMoreTokens()) {
-                    if (stringTokenizer.nextToken().contains("Pass")) {
-                        passFromFile = stringTokenizer.nextToken();
+            if (bufferedReader != null) {
+                while ((line = bufferedReader.readLine()) != null) {
+                    StringTokenizer stringTokenizer = new StringTokenizer(line);
+                    while (stringTokenizer.hasMoreTokens()) {
+                        if (stringTokenizer.nextToken().contains("Pass")) {
+                            passFromFile = stringTokenizer.nextToken();
+                        }
                     }
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return passFromFile;
     }
@@ -67,21 +71,23 @@ public class Reader {
             File file = new File(fileName);
             bufferedReader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         String line;
         String nameFromFile = null;
         try {
-            while ((line = bufferedReader.readLine()) != null) {
-                StringTokenizer stringTokenizer = new StringTokenizer(line);
-                while (stringTokenizer.hasMoreTokens()) {
-                    if (stringTokenizer.nextToken().contains("Name")) {
-                        nameFromFile = stringTokenizer.nextToken();
+            if (bufferedReader != null) {
+                while ((line = bufferedReader.readLine()) != null) {
+                    StringTokenizer stringTokenizer = new StringTokenizer(line);
+                    while (stringTokenizer.hasMoreTokens()) {
+                        if (stringTokenizer.nextToken().contains("Name")) {
+                            nameFromFile = stringTokenizer.nextToken();
+                        }
                     }
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return nameFromFile;
     }
@@ -92,21 +98,23 @@ public class Reader {
             File file = new File(fileName);
             bufferedReader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         String line;
         String surnameFromFile = null;
         try {
-            while ((line = bufferedReader.readLine()) != null) {
-                StringTokenizer stringTokenizer = new StringTokenizer(line);
-                while (stringTokenizer.hasMoreTokens()) {
-                    if (stringTokenizer.nextToken().contains("Surname")) {
-                        surnameFromFile = stringTokenizer.nextToken();
+            if (bufferedReader != null) {
+                while ((line = bufferedReader.readLine()) != null) {
+                    StringTokenizer stringTokenizer = new StringTokenizer(line);
+                    while (stringTokenizer.hasMoreTokens()) {
+                        if (stringTokenizer.nextToken().contains("Surname")) {
+                            surnameFromFile = stringTokenizer.nextToken();
+                        }
                     }
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return surnameFromFile;
     }
@@ -117,16 +125,18 @@ public class Reader {
             File file = new File(fileName);
             bufferedReader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         String line;
         List<String> list = new ArrayList<>();
         try {
-            while ((line = bufferedReader.readLine()) != null) {
-                list.add(line);
+            if (bufferedReader != null) {
+                while ((line = bufferedReader.readLine()) != null) {
+                    list.add(line);
+                }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return list;
     }
@@ -137,21 +147,23 @@ public class Reader {
             File file = new File(fileName);
             bufferedReader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         String line;
         List<Integer> list = new ArrayList<>();
         try {
-            while ((line = bufferedReader.readLine()) != null) {
-                StringTokenizer stringTokenizer = new StringTokenizer(line);
-                while (stringTokenizer.hasMoreTokens()) {
-                    if (stringTokenizer.nextToken().contains("Right answer:")) {
-                        list.add(Integer.parseInt(stringTokenizer.nextToken()));
+            if (bufferedReader != null) {
+                while ((line = bufferedReader.readLine()) != null) {
+                    StringTokenizer stringTokenizer = new StringTokenizer(line);
+                    while (stringTokenizer.hasMoreTokens()) {
+                        if (stringTokenizer.nextToken().contains("Right answer:")) {
+                            list.add(Integer.parseInt(stringTokenizer.nextToken()));
+                        }
                     }
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return list;
     }

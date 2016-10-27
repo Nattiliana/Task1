@@ -1,4 +1,4 @@
-package entity;
+package by.courses.nattiliana.entities;
 
 import java.io.Serializable;
 

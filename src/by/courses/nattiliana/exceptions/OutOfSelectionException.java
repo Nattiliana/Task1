@@ -1,4 +1,4 @@
-package entity;
+package by.courses.nattiliana.exceptions;
 
 /**
  * Created by Nataly on 21.10.2016.

@@ -1,4 +1,4 @@
-package main;
+package by.courses.nattiliana.menu;
 
 /**
  * Created by Nataly on 24.10.2016.
@@ -13,10 +13,6 @@ abstract public class MenuItem {
 
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public abstract void run();

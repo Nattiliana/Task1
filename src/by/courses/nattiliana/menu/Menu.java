@@ -1,6 +1,4 @@
-package main;
-
-import entity.OutOfSelectionException;
+package by.courses.nattiliana.menu;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +11,7 @@ import java.util.List;
  * ${VERSION}
  */
 public class Menu {
-    private List<MenuItem> items = new ArrayList<>();
+    private final List<MenuItem> items = new ArrayList<>();
     private boolean isExit = false;
 
     public Menu() {
@@ -34,7 +32,7 @@ public class Menu {
                 MenuItem item = items.get(choice - 1);
                 item.run();
             } catch (IOException e) {
-                e.printStackTrace();
+                e.getMessage();
             } catch (NumberFormatException e) {
                 System.out.println("You should use numbers!");
             } catch (IndexOutOfBoundsException e){
@@ -43,10 +41,9 @@ public class Menu {
         }
     }
 
-    public Menu addEntry(MenuItem item) {
+    public void addItem(MenuItem item) {
         int index = items.size() - 1;
         items.add(index, item);
-        return this;
     }
 
     private void printMenu() {

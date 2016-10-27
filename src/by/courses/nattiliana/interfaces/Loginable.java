@@ -1,4 +1,4 @@
-package entity;
+package by.courses.nattiliana.interfaces;
 
 import java.io.IOException;
 
