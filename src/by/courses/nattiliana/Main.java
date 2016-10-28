@@ -35,6 +35,8 @@ class Main {
                             System.out.println("Question's count: " + Question.count);
                             System.out.println("Your quiz: " + quiz);
                             Tutor.serialize(quiz);
+                        } catch (NullPointerException ex) {
+                            System.out.println("Quiz is empty!");
                         } catch (IOException e) {
                             e.getMessage();
                         }

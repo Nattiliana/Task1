@@ -132,8 +132,12 @@ public class Tutor extends User implements Serializable {
         String serializeFileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\serialize.txt";
         try (FileOutputStream fileOutputStream = new FileOutputStream(serializeFileName);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
-            objectOutputStream.writeObject(quiz);
-            System.out.println("Serialized");
+            if (quiz.equals(null)){
+                throw new NullPointerException();
+            } else {
+                objectOutputStream.writeObject(quiz);
+                System.out.println("Serialized");
+            }
         } catch (IOException ex) {
             ex.getMessage();
         }
@@ -166,8 +170,11 @@ public class Tutor extends User implements Serializable {
         int rightAnswer = 0;
         Map<Integer, String> questionMap = new TreeMap<>();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Enter question text: ");
+        System.out.println("Enter question text: \"e\" - exit");
         String questionText = bufferedReader.readLine();
+        if (questionText.equals("e")){
+            return null;
+        }
         do {
             System.out.println("Enter the amount of answers: ");
             try {
@@ -217,11 +224,14 @@ public class Tutor extends User implements Serializable {
         int amountOfQuestions = 0;
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         do {
-            System.out.println("Enter subject name: ");
+            System.out.println("Enter subject name:  \"e\" - exit");
             try {
                 subjectName = bufferedReader.readLine();
                 if (subjectName.equals(null)) {
                     throw new OutOfSelectionException();
+                }
+                if (subjectName.equals("e")) {
+                    return null;
                 }
                 isChecked = true;
             } catch (OutOfSelectionException e) {
@@ -231,11 +241,14 @@ public class Tutor extends User implements Serializable {
         Subject subject = new Subject(subjectName);
         isChecked = false;
         do {
-            System.out.println("Enter quiz name: ");
+            System.out.println("Enter quiz name: \"e\" - exit");
             try {
                 quizName = bufferedReader.readLine();
                 if (quizName.equals(null)) {
                     throw new OutOfSelectionException();
+                }
+                if (quizName.equals("e")) {
+                    return null;
                 }
                 isChecked = true;
             } catch (OutOfSelectionException e) {
