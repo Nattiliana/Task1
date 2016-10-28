@@ -58,9 +58,8 @@ class Main {
                             Student student = new Student(by.courses.nattiliana.tools.Reader.readLoginFromFile(studentFileName),
                                     by.courses.nattiliana.tools.Reader.readPassFromFile(studentFileName),
                                     by.courses.nattiliana.tools.Reader.readNameFromFile(studentFileName),
-                                    by.courses.nattiliana.tools.Reader.readSurnameFromFile(studentFileName));
-                            Student.deserialize();
-                            int result = Student.passTheQuiz();
+                                    by.courses.nattiliana.tools.Reader.readSurnameFromFile(studentFileName));                            ;
+                            int result = Student.passTheQuiz(Student.deserialize());
                             System.out.println(new RegistrationList(student, result));
                         } catch (IOException e) {
                             e.getMessage();

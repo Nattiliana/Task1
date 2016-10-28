@@ -10,7 +10,7 @@ import java.util.*;
  */
 public class Tutor extends User implements Serializable {
     private static final String fileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\tutor.txt";
-
+    private static final String answersFileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\answers.txt";
 
     /**
      * Instantiates a new Tutor.
@@ -140,7 +140,7 @@ public class Tutor extends User implements Serializable {
     }
 
     private static void writeAnswersToFile(String fileName, int answer, int number) {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName, true);
              BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream))) {
             bufferedWriter.append("q" + number + ": " + answer + " ");
             bufferedWriter.flush();
@@ -149,8 +149,18 @@ public class Tutor extends User implements Serializable {
         }
     }
 
-    public static Question createQuestion(int questionNumber) throws IOException {
+    private static void clearFile(String fileName) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream))) {
+            bufferedWriter.append("");
+            bufferedWriter.flush();
+        } catch (IOException ex) {
+            ex.getMessage();
+        }
+    }
 
+    public static Question createQuestion(int questionNumber) throws IOException {
+        clearFile(answersFileName);
         boolean isChecked = false;
         int number = 0;
         int rightAnswer = 0;
@@ -214,8 +224,6 @@ public class Tutor extends User implements Serializable {
                     throw new OutOfSelectionException();
                 }
                 isChecked = true;
-            } catch (IOException e) {
-                e.getMessage();
             } catch (OutOfSelectionException e) {
                 System.out.println("Please, enter a valid subject.");
             }
@@ -230,8 +238,6 @@ public class Tutor extends User implements Serializable {
                     throw new OutOfSelectionException();
                 }
                 isChecked = true;
-            } catch (IOException e) {
-                e.getMessage();
             } catch (OutOfSelectionException e) {
                 System.out.println("Please, enter a valid name of quiz.");
             }
@@ -258,7 +264,6 @@ public class Tutor extends User implements Serializable {
             list.add(question);
         }
         Collections.sort(list, new Question());
-        String answersFileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\answers.txt";
         ListIterator iterator = list.listIterator();
         while (iterator.hasNext()) {
             Question question = (Question)iterator.next();

@@ -127,29 +127,30 @@ public class Student extends User {
         while (!isChecked);
     }
 
-    public static void deserialize() {
+    public static int deserialize() {
         String serializeFileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\serialize.txt";
         try (FileInputStream fileInputStream = new FileInputStream(serializeFileName);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
-            while ((fileInputStream.available()) > 0 ) {
                 Quiz quiz = (Quiz) objectInputStream.readObject();
                 System.out.println("Deserialize object");
                 System.out.println(quiz.getQuizName() + quiz.getSubject() + quiz.getDateOfCreate());
                 for (int i =0; i < quiz.getQuestionsList().size(); i++){
                     System.out.println(quiz.getQuestionsList().get(i).toStringForStudent());
                 }
-            }
+                return quiz.getQuestionsList().size();
         } catch (IOException ex) {
             ex.getMessage();
+            return 0;
         } catch (ClassNotFoundException e) {
             System.out.println("Class not found!");
             e.getMessage();
+            return 0;
         }
     }
 
-    public static int passTheQuiz() throws IOException {
+    public static int passTheQuiz(int amountOfQuestions) throws IOException {
         int count = 0;
-        for (int i = 0; i < Question.count; i++) {
+        for (int i = 0; i < amountOfQuestions; i++) {
             try {
                 System.out.println("Enter the answer for " + (i + 1) + " question");
                 BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
