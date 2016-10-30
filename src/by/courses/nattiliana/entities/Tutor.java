@@ -130,7 +130,7 @@ public class Tutor extends User implements Serializable {
 
     public static void serialize(List<Quiz> list) {
         String serializeFileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\serialize.txt";
-        try (FileOutputStream fileOutputStream = new FileOutputStream(serializeFileName, true);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(serializeFileName);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
             if (list.equals(null)) {
                 throw new NullPointerException();
@@ -270,12 +270,14 @@ public class Tutor extends User implements Serializable {
         return new Quiz(quizName, subject, list, calendar.getTime());
     }
 
-    public static List<Quiz> deleteQuiz() {
+    public static List<Quiz> deleteQuiz() throws OutOfSelectionException {
         String serializeFileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\serialize.txt";
         try (FileInputStream fileInputStream = new FileInputStream(serializeFileName);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
             List<Quiz> list = (List<Quiz>) objectInputStream.readObject();
-            if (!(list.isEmpty())) {
+            if (list.isEmpty()){
+                throw new OutOfSelectionException();
+            } else {
                 System.out.println("Deserialize object");
                 for (int i = 0; i < list.size(); i++) {
                     System.out.print((i + 1) + " quiz: ");
@@ -300,7 +302,6 @@ public class Tutor extends User implements Serializable {
                         }
                         isChecked = true;
                         list.remove(quizNumber - 1);
-                        Student.clearFile(serializeFileName);
                         return list;
                     } catch (NumberFormatException ex) {
                         System.out.println("You should use numbers");
@@ -310,12 +311,7 @@ public class Tutor extends User implements Serializable {
                 }
                 while (!isChecked);
             }
-            else {
-                throw new NullPointerException();
-            }
-        } catch (ClassNotFoundException e) {
-            e.getMessage();
-        } catch (IOException e) {
+        } catch (ClassNotFoundException | IOException e) {
             e.getMessage();
         }
         return null;
