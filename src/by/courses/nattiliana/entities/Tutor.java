@@ -128,14 +128,14 @@ public class Tutor extends User implements Serializable {
         while (!isChecked);
     }
 
-    public static void serialize(Quiz quiz) {
+    public static void serialize(List<Quiz> list) {
         String serializeFileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\serialize.txt";
-        try (FileOutputStream fileOutputStream = new FileOutputStream(serializeFileName);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(serializeFileName, true);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
-            if (quiz.equals(null)) {
+            if (list.equals(null)) {
                 throw new NullPointerException();
             } else {
-                objectOutputStream.writeObject(quiz);
+                objectOutputStream.writeObject(list);
                 System.out.println("Serialized");
             }
         } catch (IOException ex) {
@@ -143,28 +143,7 @@ public class Tutor extends User implements Serializable {
         }
     }
 
-    private static void writeAnswersToFile(String fileName, int answer, int number) {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName, true);
-             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream))) {
-            bufferedWriter.append("q" + number + ": " + answer + " ");
-            bufferedWriter.flush();
-        } catch (IOException ex) {
-            ex.getMessage();
-        }
-    }
-
-    private static void clearFile(String fileName) {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream))) {
-            bufferedWriter.append("");
-            bufferedWriter.flush();
-        } catch (IOException ex) {
-            ex.getMessage();
-        }
-    }
-
     private static Question createQuestion(int questionNumber) throws IOException {
-        clearFile(answersFileName);
         boolean isChecked = false;
         int number = 0;
         int rightAnswer = 0;
@@ -281,19 +260,64 @@ public class Tutor extends User implements Serializable {
             } catch (OutOfSelectionException e) {
                 System.out.println("Please, enter a valid number.");
             }
-        }
-        while (!isChecked);
+        } while (!isChecked);
         List<Question> list = new ArrayList<>();
         for (int i = 0; i < amountOfQuestions; i++) {
             Question question = createQuestion(i + 1);
             list.add(question);
         }
         Collections.sort(list, new Question());
-        ListIterator iterator = list.listIterator();
-        while (iterator.hasNext()) {
-            Question question = (Question) iterator.next();
-            writeAnswersToFile(answersFileName, question.getRightAnswer(), question.getQuestionNumber());
-        }
         return new Quiz(quizName, subject, list, calendar.getTime());
+    }
+
+    public static List<Quiz> deleteQuiz() {
+        String serializeFileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\serialize.txt";
+        try (FileInputStream fileInputStream = new FileInputStream(serializeFileName);
+             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+            List<Quiz> list = (List<Quiz>) objectInputStream.readObject();
+            if (!(list.isEmpty())) {
+                System.out.println("Deserialize object");
+                for (int i = 0; i < list.size(); i++) {
+                    System.out.print((i + 1) + " quiz: ");
+                    System.out.println(list.get(i).getQuizName() + list.get(i).getSubject() + list.get(i).getDateOfCreate());
+                    for (int j = 0; j < list.get(i).getQuestionsList().size(); j++) {
+                        System.out.println(list.get(i).getQuestionsList().get(j).toStringForStudent());
+                    }
+                    System.out.println("---------------------------------------------------");
+                }
+                boolean isChecked = false;
+                int quizNumber;
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+                do {
+                    System.out.println("Choose quiz number that you want to delete: ");
+                    try {
+                        quizNumber = Integer.parseInt(bufferedReader.readLine());
+                        if (quizNumber <= 0) {
+                            throw new OutOfSelectionException();
+                        }
+                        if (quizNumber > list.size()) {
+                            throw new OutOfSelectionException();
+                        }
+                        isChecked = true;
+                        list.remove(quizNumber - 1);
+                        Student.clearFile(serializeFileName);
+                        return list;
+                    } catch (NumberFormatException ex) {
+                        System.out.println("You should use numbers");
+                    } catch (OutOfSelectionException e) {
+                        System.out.println("Please, enter a valid number.");
+                    }
+                }
+                while (!isChecked);
+            }
+            else {
+                throw new NullPointerException();
+            }
+        } catch (ClassNotFoundException e) {
+            e.getMessage();
+        } catch (IOException e) {
+            e.getMessage();
+        }
+        return null;
     }
 }

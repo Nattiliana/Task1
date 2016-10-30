@@ -11,7 +11,7 @@ public class Question implements Comparator<Question>, Serializable {
     private int questionNumber;
     private String question;
     private Map<Integer, String> answerMap = new TreeMap<>();
-    private transient int rightAnswer;
+    private int rightAnswer;
     public static int count;
 
     /**
