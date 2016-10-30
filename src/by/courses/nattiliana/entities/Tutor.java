@@ -132,7 +132,7 @@ public class Tutor extends User implements Serializable {
         String serializeFileName = "D:\\Program\\Java Workspace\\NC\\Task1\\src\\by\\courses\\nattiliana\\files\\serialize.txt";
         try (FileOutputStream fileOutputStream = new FileOutputStream(serializeFileName);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
-            if (quiz.equals(null)){
+            if (quiz.equals(null)) {
                 throw new NullPointerException();
             } else {
                 objectOutputStream.writeObject(quiz);
@@ -163,23 +163,35 @@ public class Tutor extends User implements Serializable {
         }
     }
 
-    public static Question createQuestion(int questionNumber) throws IOException {
+    private static Question createQuestion(int questionNumber) throws IOException {
         clearFile(answersFileName);
         boolean isChecked = false;
         int number = 0;
         int rightAnswer = 0;
+        String questionText = null;
         Map<Integer, String> questionMap = new TreeMap<>();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Enter question text: \"e\" - exit");
-        String questionText = bufferedReader.readLine();
-        if (questionText.equals("e")){
-            return null;
-        }
+        do {
+            System.out.println("Enter " + questionNumber + " question text: \"e\" - exit");
+            try {
+                questionText = bufferedReader.readLine();
+                if (questionText.equals("")) {
+                    throw new OutOfSelectionException();
+                }
+                if (questionText.equals("e")) {
+                    return null;
+                }
+                isChecked = true;
+            } catch (OutOfSelectionException e) {
+                System.out.println("Please, enter a valid text.");
+            }
+        } while (!isChecked);
+        isChecked = false;
         do {
             System.out.println("Enter the amount of answers: ");
             try {
                 number = Integer.parseInt(bufferedReader.readLine());
-                if (number < 0) {
+                if (number <= 0) {
                     throw new OutOfSelectionException();
                 }
                 isChecked = true;
@@ -190,17 +202,17 @@ public class Tutor extends User implements Serializable {
             }
         }
         while (!isChecked);
-        System.out.println("Enter answers: ");
         for (int i = 0; i < number; i++) {
+            System.out.println("Enter " + (i + 1) + " answer: ");
             String answer = bufferedReader.readLine();
             questionMap.put(i + 1, answer);
         }
         isChecked = false;
         do {
-            System.out.println("Enter right answer number: ");
+            System.out.println("Enter right answer number for " + questionNumber + " question: ");
             try {
                 rightAnswer = Integer.parseInt(bufferedReader.readLine());
-                if (rightAnswer < 0) {
+                if (rightAnswer <= 0) {
                     throw new OutOfSelectionException();
                 }
                 if (rightAnswer > number) {
@@ -227,7 +239,7 @@ public class Tutor extends User implements Serializable {
             System.out.println("Enter subject name:  \"e\" - exit");
             try {
                 subjectName = bufferedReader.readLine();
-                if (subjectName.equals(null)) {
+                if (subjectName.equals("")) {
                     throw new OutOfSelectionException();
                 }
                 if (subjectName.equals("e")) {
@@ -244,7 +256,7 @@ public class Tutor extends User implements Serializable {
             System.out.println("Enter quiz name: \"e\" - exit");
             try {
                 quizName = bufferedReader.readLine();
-                if (quizName.equals(null)) {
+                if (quizName.equals("")) {
                     throw new OutOfSelectionException();
                 }
                 if (quizName.equals("e")) {
@@ -260,7 +272,7 @@ public class Tutor extends User implements Serializable {
             System.out.println("Enter the amount of questions in quiz: ");
             try {
                 amountOfQuestions = Integer.parseInt(bufferedReader.readLine());
-                if (amountOfQuestions < 0) {
+                if (amountOfQuestions <= 0) {
                     throw new OutOfSelectionException();
                 }
                 isChecked = true;
@@ -272,14 +284,14 @@ public class Tutor extends User implements Serializable {
         }
         while (!isChecked);
         List<Question> list = new ArrayList<>();
-        for (int i = 0; i < amountOfQuestions; i++){
-            Question question = createQuestion(i+1);
+        for (int i = 0; i < amountOfQuestions; i++) {
+            Question question = createQuestion(i + 1);
             list.add(question);
         }
         Collections.sort(list, new Question());
         ListIterator iterator = list.listIterator();
         while (iterator.hasNext()) {
-            Question question = (Question)iterator.next();
+            Question question = (Question) iterator.next();
             writeAnswersToFile(answersFileName, question.getRightAnswer(), question.getQuestionNumber());
         }
         return new Quiz(quizName, subject, list, calendar.getTime());

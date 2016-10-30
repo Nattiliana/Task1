@@ -23,6 +23,12 @@ public enum MenuItems {
             return ". Create quiz";
         }
     },
+    DELETE_QUIZ("Deleting quiz"){
+        @Override
+        public String toString() {
+            return ". Delete quiz";
+        }
+    },
     ANSWER_QUIZ("Answer the questions below"){
         @Override
         public String toString() {
